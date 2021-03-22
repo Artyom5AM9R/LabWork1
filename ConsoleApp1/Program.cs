@@ -47,8 +47,8 @@ namespace LabWork1
                 //3.c
                 Console.ReadKey();
                 BlueTextOutput("\nДобавление записи в 1-й список\n");
-                Person Man = new Person();
-                ListOne.Add(Man.InputPerson());
+                Person Human = new Person();
+                ListOne.Add(Human.InputPerson());
                 ListOne.ShowList("\n1-й список:");
                 ListTwo.ShowList("2-й список:");
 
@@ -56,7 +56,7 @@ namespace LabWork1
                 Console.ReadKey();
                 BlueTextOutput("\nКопирование записи о втором человеке из 1-го списка в " +
                     "конец 2-го списка\n");
-                ListTwo.Add(ListOne.Find(5));
+                ListTwo.Add(ListOne.Find(2));
                 ListOne.ShowList("1-й список:");
                 ListTwo.ShowList("2-й список:");
 

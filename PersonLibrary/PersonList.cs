@@ -25,7 +25,7 @@ namespace PersonLibrary
             Console.WriteLine(heading);
             foreach (Person Man in _list)
             {
-                Console.WriteLine(Man.Info());
+                Console.WriteLine(Man.Info);
             }
             Console.WriteLine();
         }
@@ -66,11 +66,11 @@ namespace PersonLibrary
                 {
                     Array.Clear(_list, index - 1, 1);
                     List<Person> listForCopy = new List<Person>();
-                    foreach (Person Man in _list)
+                    foreach (Person Human in _list)
                     {
-                        if (Man != null)
+                        if (Human != null)
                         {
-                            listForCopy.Add(Man);
+                            listForCopy.Add(Human);
                         }
                     }
                     Array.Resize(ref _list, _list.Length - 1);
@@ -81,15 +81,14 @@ namespace PersonLibrary
                     Person.RedTextOutput("Спиcок пуст, записей для удаления нет!\n");
                 }
             }
-            catch (IndexOutOfRangeException)
+            catch (Exception exception)
             {
-                Person.RedTextOutput($"Место ошибки: класс - {nameof(PersonList)}, метод  - {nameof(RemoveByIndex)}\n" +
-                    "Сведенья об ошибке: введённый индекс для поиска выходит за размеры списка!\n");
+                Person.RedTextOutput($"{exception.Message}\n");
             }
         }
 
         /// <summary>
-        /// Функция поиска человека в списке людей по индексу записи
+        /// Метод для поиска записи о человека в списке людей по её индексу
         /// </summary>
         /// <returns>Значение формата Person</returns>
         public Person Find(int index)
@@ -98,11 +97,10 @@ namespace PersonLibrary
             {
                 return _list[index - 1];
             }
-            catch (IndexOutOfRangeException)
+            catch (Exception exception)
             {
-                Person.RedTextOutput($"Место ошибки: класс - {nameof(PersonList)}, метод  - {nameof(Find)}\n" +
-                    "Сведенья об ошибке: введённый индекс для поиска выходит за диапазон записей списка!\n" +
-                    "В качестве результата поиска была использована произвольная запись о человеке.\n");
+                Person.RedTextOutput($"{exception.Message}\nВ качестве результата поиска была принята " +
+                    "случайная запись о человеке.\n");
                 return Person.GetRandomPerson();
             }
         }
@@ -112,7 +110,6 @@ namespace PersonLibrary
         /// </summary>
         public void FindIndex()
         {
-            int noteIndex = 0;
             Console.WriteLine("Введите параметры записи для поиска её индекса в списке:");
             Console.Write("Имя - ");
             string searchLine = Console.ReadLine();
@@ -120,11 +117,12 @@ namespace PersonLibrary
             searchLine = searchLine + Console.ReadLine();
             Console.Write("Возраст - ");
             searchLine = searchLine + Console.ReadLine();
-            foreach (Person Man in _list)
+            int noteIndex = 0;
+            foreach (Person Human in _list)
             {
-                if (string.Format(Man.Name + Man.Surname + Man.Age) == searchLine)
+                if (string.Format(Human.Name + Human.Surname + Human.Age) == searchLine)
                 {
-                    noteIndex = Array.IndexOf(_list, Man) + 1;
+                    noteIndex = Array.IndexOf(_list, Human) + 1;
                 }
             }
             if (noteIndex > 0)
@@ -146,7 +144,7 @@ namespace PersonLibrary
         }
 
         /// <summary>
-        /// Функция, опряделяющая количество записей в списке людей
+        /// Метод для опряделения количества записей в списке людей
         /// </summary>
         /// <returns>Число типа int</returns>
         public int Count()
