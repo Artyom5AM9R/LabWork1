@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 
 namespace PersonLibrary
 {
-//TODO: Убрать консоль +++
     /// <summary>
     /// Класс для описания человека
     /// </summary>
@@ -28,7 +27,6 @@ namespace PersonLibrary
         /// </summary>
         private int _age;
 
-//TODO: RSDN +++
         /// <summary>
         /// Минимальный возраст человека
         /// </summary>
@@ -129,34 +127,6 @@ namespace PersonLibrary
                               $"возраст - {Age}; пол - {TranslateGenderIntoRussian(Gender)}";
 
         /// <summary>
-        /// Метод для ввода имени человека
-        /// </summary>
-        /// <param name="surname">Значение для ввода</param>
-        public void InputName(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new Exception("Пустой ввод не допускается!");
-            }
-
-            Name = NameOrSurnameValidation(name);
-        }
-
-        /// <summary>
-        /// Метод для ввода фамилии человека
-        /// </summary>
-        /// <param name="surname">Значение для ввода</param>
-        public void InputSurname(string surname)
-        {
-            if (string.IsNullOrEmpty(surname))
-            {
-                throw new Exception("Пустой ввод не допускается!");
-            }
-
-            Surname = NameOrSurnameValidation(surname);
-        }
-
-        /// <summary>
         /// Метод для проверки наличия одного языка в значениях имени и фамилии
         /// </summary>
         public void CheckOneLanguageInPerson()
@@ -182,12 +152,12 @@ namespace PersonLibrary
 
             nameForCheck = nameForCheck.ToLower();
             var patternList = new List<string>()
-                {
-                    @"^[а-яё]{2,}$",
-                    @"^[a-z]{2,}$",
-                    @"^[а-яё]{2,}-[а-яё]{2,}$",
-                    @"^[a-z]{2,}-[a-z]{2,}$",
-                };
+            {
+                @"^[а-яё]{2,}$",
+                @"^[a-z]{2,}$",
+                @"^[а-яё]{2,}-[а-яё]{2,}$",
+                @"^[a-z]{2,}-[a-z]{2,}$",
+            };
 
             foreach (string pattern in patternList)
             {
@@ -216,45 +186,6 @@ namespace PersonLibrary
             }
 
             return name;
-        }
-
-        /// <summary>
-        /// Метод для ввода возраста человека из консоли и проверки введённого значения
-        /// </summary>
-        /// <param name="inputLine">Значение для ввода</param>
-        public void InputAge(string inputLine)
-        {
-            int age;
-
-            try
-            {
-                age = int.Parse(inputLine);
-            }
-            catch (Exception exception)
-            {
-                throw new Exception(exception.Message);
-            }
-
-            Age = age;
-        }
-
-        /// <summary>
-        /// Метод для ввода пола человека из консоли и проверки введённого значения
-        /// </summary>
-        /// <param name="genderString">Значение для ввода</param>
-        public void InputGender(string genderString)
-        {
-            switch (genderString.ToLower())
-            {
-                case "м":
-                    Gender = GenderType.Male;
-                    break;
-                case "ж":
-                    Gender = GenderType.Female;
-                    break;
-                default:
-                    throw new Exception("Пол был указан некорректно.");
-            }
         }
 
         /// <summary>

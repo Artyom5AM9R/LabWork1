@@ -37,7 +37,6 @@ namespace PersonLibrary
         /// </summary>
         public static Random Randomize = new Random();
 
-        //TODO: Вынести в отдельный класс +++
         /// <summary>
         /// Метод для получения данных о человеке со случайными параметрами
         /// </summary>

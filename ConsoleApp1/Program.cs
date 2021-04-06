@@ -10,6 +10,57 @@ namespace LabWork1
     public class Program
     {
         /// <summary>
+        /// Метод для ввода имени или фамилии человека
+        /// </summary>
+        /// <param name="value">Значение для ввода</param>
+        private static string InputNameOrSurname(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new Exception("Пустой ввод не допускается!");
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Метод для ввода возраста человека из консоли и проверки введённого значения
+        /// </summary>
+        /// <param name="value">Значение для ввода</param>
+        private static int InputAge(string value)
+        {
+            int age;
+
+            try
+            {
+                age = int.Parse(value);
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+
+            return age;
+        }
+
+        /// <summary>
+        /// Метод для ввода пола человека из консоли и проверки введённого значения
+        /// </summary>
+        /// <param name="genderString">Значение для ввода</param>
+        private static GenderType InputGender(string value)
+        {
+            switch (value.ToLower())
+            {
+                case "м":
+                    return GenderType.Male;
+                case "ж":
+                    return GenderType.Female;
+                default:
+                    throw new Exception("Пол был указан некорректно.");
+            }
+        }
+
+        /// <summary>
         /// Метод для ввода данных о человеке
         /// </summary>
         /// <returns>Значение типа Person</returns>
@@ -19,8 +70,8 @@ namespace LabWork1
 
             while (true)
             {
-                SafeReadFromConsole("Введите имя - ", input => man.InputName(input));
-                SafeReadFromConsole("Введите фамилию - ", input => man.InputSurname(input));
+                SafeReadFromConsole("Введите имя - ", input => man.Name = InputNameOrSurname(input));
+                SafeReadFromConsole("Введите фамилию - ", input => man.Surname = InputNameOrSurname(input));
 
                 try
                 {
@@ -35,8 +86,8 @@ namespace LabWork1
                 }
             }
 
-            SafeReadFromConsole("Введите возраст - ", input => man.InputAge(input));
-            SafeReadFromConsole("Введите пол (м/ж) - ", input => man.InputGender(input));
+            SafeReadFromConsole("Введите возраст - ", input => man.Age = InputAge(input));
+            SafeReadFromConsole("Введите пол (м/ж) - ", input => man.Gender = InputGender(input));
 
             return man;
         }
@@ -87,7 +138,6 @@ namespace LabWork1
             {
                 try
                 {
-                    //TODO: RSDN +++
                     PersonList listOne = new PersonList();
                     PersonList listTwo = new PersonList();
 

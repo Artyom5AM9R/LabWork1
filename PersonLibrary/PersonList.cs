@@ -65,7 +65,6 @@ namespace PersonLibrary
         {
             try
             {
-//TODO: Порефакторить +++
                 Array.Clear(_list, index - 1, 1);
                 _list = _list.Where(x => x != null).ToArray();
             }
@@ -100,21 +99,21 @@ namespace PersonLibrary
         /// <summary>
         /// Метод для поиска индекса записи в списке людей по её параметрам
         /// </summary>
+        /// <param name="name">Имя человека</param>
+        /// <param name="surname">Фамилия человека</param>
+        /// <param name="age">Возраст человека</param>
+        /// <returns>Индекс записи в списке людей, либо -1, если запись не найдена</returns>
         public int FindIndex(string name, string surname, int age)
         {
-//TODO: Убрать консоль +++
-            string searchLine = name + surname + age;
-            int noteIndex = 0;
-
             foreach (Person human in _list)
             {
-                if (string.Format(human.Name + human.Surname + human.Age) == searchLine)
+                if (human.Name == name && human.Surname == surname && human.Age == age)
                 {
-                    noteIndex = Array.IndexOf(_list, human) + 1;
+                    return Array.IndexOf(_list, human) + 1;
                 }
             }
 
-            return noteIndex;
+            return -1;
         }
 
         /// <summary>
