@@ -10,12 +10,69 @@ namespace LabWork1
     public class Program
     {
         /// <summary>
-        /// Метод для вывода в консоль текста в синем цвете
+        /// Метод для ввода данных о человеке
         /// </summary>
-        /// <param name="text">Текст для вывода в консоль</param>
-        public static void BlueTextOutput(string text)
+        /// <returns>Значение типа Person</returns>
+        public static Person InputPerson()
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
+            var man = new Person();
+
+            while (true)
+            {
+                SafeReadFromConsole("Введите имя - ", input => man.InputName(input));
+                SafeReadFromConsole("Введите фамилию - ", input => man.InputSurname(input));
+
+                try
+                {
+                    man.CheckOneLanguageInPerson();
+                    break;
+                }
+                catch (Exception exception)
+                {
+                    ColorTextInConsole($"\n{exception.Message} Повторите ввод.\n",
+                        ConsoleColor.Red);
+                    man = new Person();
+                }
+            }
+
+            SafeReadFromConsole("Введите возраст - ", input => man.InputAge(input));
+            SafeReadFromConsole("Введите пол (м/ж) - ", input => man.InputGender(input));
+
+            return man;
+        }
+
+        /// <summary>
+        /// Метод для повтора действий по считыванию значения из консоли до момента получения
+        /// корректного значения и последующего совершения действия с ним
+        /// </summary>
+        /// <param name="outputLine">Строка для вывода в консоль</param>
+        /// <param name="onRead">Действие, которое необходимо сделать</param>
+        public static void SafeReadFromConsole(string outputLine, Action<string> onRead)
+        {
+            while (true)
+            {
+                try
+                {
+                    Console.Write(outputLine);
+                    onRead(Console.ReadLine());
+                    return;
+                }
+                catch (Exception exception)
+                {
+                    ColorTextInConsole($"\n{exception.Message} Повторите ввод.\n",
+                        ConsoleColor.Red);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Метод для вывода в консоль текста в заданном цвете
+        /// </summary>
+        /// <param name="text">Текст для вывода</param>
+        /// <param name="color">Цвет текста</param>
+        public static void ColorTextInConsole(string text, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
             Console.WriteLine(text);
             Console.ResetColor();
         }
@@ -28,60 +85,78 @@ namespace LabWork1
         {
             while (true)
             {
-                PersonList ListOne = new PersonList();
-                PersonList ListTwo = new PersonList();
-
-                //3.a
-                BlueTextOutput("Создание 2-х списков с записями о людях\n");
-                Console.ReadKey();
-                for (int i = 0; i < 3; i++)
+                try
                 {
-                    ListOne.Add(Person.GetRandomPerson());
-                    ListTwo.Add(Person.GetRandomPerson());
+                    //TODO: RSDN +++
+                    PersonList listOne = new PersonList();
+                    PersonList listTwo = new PersonList();
+
+                    //3.a
+                    ColorTextInConsole("Создание 2-х списков с записями о людях\n",
+                        ConsoleColor.Blue);
+                    Console.ReadKey();
+                    for (int i = 0; i < 3; i++)
+                    {
+                        listOne.Add(RandomPerson.GetRandomPerson());
+                        listTwo.Add(RandomPerson.GetRandomPerson());
+                    }
+
+                    //3.b
+                    listOne.ShowList("1-й список:");
+                    listTwo.ShowList("2-й список:");
+
+                    //3.c
+                    Console.ReadKey();
+                    ColorTextInConsole("\nДобавление записи в 1-й список\n",
+                        ConsoleColor.Blue);
+                    var man = InputPerson();
+                    listOne.Add(man);
+                    listOne.ShowList("\n1-й список:");
+                    listTwo.ShowList("2-й список:");
+
+                    //3.d
+                    Console.ReadKey();
+                    ColorTextInConsole("\nКопирование записи о втором человеке из 1-го списка" +
+                        "в конец 2-го списка\n", ConsoleColor.Blue);
+                    listTwo.Add(listOne.Find(2));
+                    listOne.ShowList("1-й список:");
+                    listTwo.ShowList("2-й список:");
+
+                    //ListOne.Clear();
+
+                    //3.e
+                    Console.ReadKey();
+                    ColorTextInConsole("\nУдаление записи о втором человеке из 1-го списка\n",
+                        ConsoleColor.Blue);
+                    listOne.RemoveByIndex(2);
+                    listOne.ShowList("1-й список:");
+                    listTwo.ShowList("2-й список:");
+
+                    //3.f
+                    Console.ReadKey();
+                    ColorTextInConsole("\nОчистка 2-го списка\n", ConsoleColor.Blue);
+                    listTwo.Clear();
+                    Console.WriteLine("Количество записей в 1-м списке - " + listOne.Count());
+                    Console.WriteLine("Количество записей в 2-м списке - " + listTwo.Count());
+
+                    ColorTextInConsole("\nДля выхода из программы нажмите клавишу Esc\n",
+                        ConsoleColor.Blue);
+                    if (Console.ReadKey().Key == ConsoleKey.Escape)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine();
+                    }
                 }
-
-                //3.b
-                ListOne.ShowList("1-й список:");
-                ListTwo.ShowList("2-й список:");
-
-                //3.c
-                Console.ReadKey();
-                BlueTextOutput("\nДобавление записи в 1-й список\n");
-                Person Human = new Person();
-                ListOne.Add(Human.InputPerson());
-                ListOne.ShowList("\n1-й список:");
-                ListTwo.ShowList("2-й список:");
-
-                //3.d
-                Console.ReadKey();
-                BlueTextOutput("\nКопирование записи о втором человеке из 1-го списка в " +
-                    "конец 2-го списка\n");
-                ListTwo.Add(ListOne.Find(2));
-                ListOne.ShowList("1-й список:");
-                ListTwo.ShowList("2-й список:");
-
-                //3.e
-                Console.ReadKey();
-                BlueTextOutput("\nУдаление записи о втором человеке из 1-го списка\n");
-                ListOne.RemoveByIndex(2);
-                ListOne.ShowList("1-й список:");
-                ListTwo.ShowList("2-й список:");
-
-                //3.f
-                Console.ReadKey();
-                BlueTextOutput("\nОчистка 2-го списка\n");
-                ListTwo.Clear();
-                Console.WriteLine("Количество записей в 1-м списке - " + ListOne.Count());
-                Console.WriteLine("Количество записей в 2-м списке - " + ListTwo.Count());
-                
-                BlueTextOutput("\nДля выхода из программы нажмите клавишу Esc\n");
-                if (Console.ReadKey().Key == ConsoleKey.Escape)
+                catch (Exception exception)
                 {
+                    ColorTextInConsole($"{exception.Message}\n", ConsoleColor.Red);
+                    ColorTextInConsole("Работа программы будет остановлена после нажатия любой клавиши",
+                        ConsoleColor.Red);
+                    Console.ReadKey();
                     break;
-                }
-                else 
-                {
-                    Console.WriteLine();
                 }
             }
         }

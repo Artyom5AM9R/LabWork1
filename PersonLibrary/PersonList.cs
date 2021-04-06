@@ -23,9 +23,9 @@ namespace PersonLibrary
         public void ShowList(string heading)
         {
             Console.WriteLine(heading);
-            foreach (Person Man in _list)
+            foreach (Person man in _list)
             {
-                Console.WriteLine(Man.Info);
+                Console.WriteLine(man.Info);
             }
             Console.WriteLine();
         }
@@ -43,15 +43,18 @@ namespace PersonLibrary
         /// <summary>
         /// Метод для удаления последней записи из списка людей
         /// </summary>
-        public void Remove()
+        public void RemoveLastPerson()
         {
-            if (_list.Length > 0)
+            try
             {
-                Array.Resize(ref _list, _list.Length - 1);
+                if (_list.Length > 0)
+                {
+                    Array.Resize(ref _list, _list.Length - 1);
+                }
             }
-            else
+            catch
             {
-                Person.RedTextOutput("Спиcок пуст, записей для удаления нет!\n");
+                throw new Exception("Спиcок пуст, нет записей для удаления.");
             }
         }
 
@@ -62,33 +65,24 @@ namespace PersonLibrary
         {
             try
             {
-                if (_list.Length > 0)
-                {
-                    Array.Clear(_list, index - 1, 1);
-                    List<Person> listForCopy = new List<Person>();
-                    foreach (Person Human in _list)
-                    {
-                        if (Human != null)
-                        {
-                            listForCopy.Add(Human);
-                        }
-                    }
-                    Array.Resize(ref _list, _list.Length - 1);
-                    _list = listForCopy.ToArray();
-                }
-                else
-                {
-                    Person.RedTextOutput("Спиcок пуст, записей для удаления нет!\n");
-                }
+//TODO: Порефакторить +++
+                Array.Clear(_list, index - 1, 1);
+                _list = _list.Where(x => x != null).ToArray();
             }
-            catch (Exception exception)
+            catch
             {
-                Person.RedTextOutput($"{exception.Message}\n");
-            }
+                switch (_list.Length)
+                {
+                    case 0:
+                        throw new Exception("Спиcок пуст, нет записей для удаления.");
+                    default:
+                        throw new Exception("Указан некорректный индекс для поиска записи.");
+                }
+            }            
         }
 
         /// <summary>
-        /// Метод для поиска записи о человека в списке людей по её индексу
+        /// Метод для поиска записи о человеке в списке людей по её индексу
         /// </summary>
         /// <returns>Значение формата Person</returns>
         public Person Find(int index)
@@ -97,42 +91,30 @@ namespace PersonLibrary
             {
                 return _list[index - 1];
             }
-            catch (Exception exception)
+            catch
             {
-                Person.RedTextOutput($"{exception.Message}\nВ качестве результата поиска была принята " +
-                    "случайная запись о человеке.\n");
-                return Person.GetRandomPerson();
+                throw new Exception("Указан некорректный индекс для поиска записи.");
             }
         }
 
         /// <summary>
         /// Метод для поиска индекса записи в списке людей по её параметрам
         /// </summary>
-        public void FindIndex()
+        public int FindIndex(string name, string surname, int age)
         {
-            Console.WriteLine("Введите параметры записи для поиска её индекса в списке:");
-            Console.Write("Имя - ");
-            string searchLine = Console.ReadLine();
-            Console.Write("Фамилия - ");
-            searchLine = searchLine + Console.ReadLine();
-            Console.Write("Возраст - ");
-            searchLine = searchLine + Console.ReadLine();
+//TODO: Убрать консоль +++
+            string searchLine = name + surname + age;
             int noteIndex = 0;
-            foreach (Person Human in _list)
+
+            foreach (Person human in _list)
             {
-                if (string.Format(Human.Name + Human.Surname + Human.Age) == searchLine)
+                if (string.Format(human.Name + human.Surname + human.Age) == searchLine)
                 {
-                    noteIndex = Array.IndexOf(_list, Human) + 1;
+                    noteIndex = Array.IndexOf(_list, human) + 1;
                 }
             }
-            if (noteIndex > 0)
-            {
-                Console.WriteLine("\nИндекс записи в списке - " + noteIndex + "\n");
-            }
-            else
-            {
-                Person.RedTextOutput("\nТакой записи в списке нет!\n");
-            }
+
+            return noteIndex;
         }
 
         /// <summary>
